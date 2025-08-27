@@ -1,0 +1,13 @@
+127.0.0.1 - - [26/Aug/2025 15:36:58] "GET /?id=79b601f1-bf03-4bdf-84b6-05a2519148f0&vscodeBrowserReqId=1756222617658 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /notes/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/e57805618994549f.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/91adb7bdb9870c6a.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/2a7e19d370c106db.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/f1ee6916a91aa7e1.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/5dbf38a244ed1dc8.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:10] "GET /_next/static/chunks/turbopack-637c4ab75f03f609.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:11] "GET /_next/static/chunks/f6690f41592fce1a.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:11] "GET /_next/static/chunks/060f9a97930f3d04.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:11] "GET /_next/static/chunks/f21cef57f86cc594.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Aug/2025 15:41:11] "GET /favicon.ico?favicon.0b3bf435.ico HTTP/1.1" 200 -

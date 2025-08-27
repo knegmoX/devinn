@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Preferences stored as JSON
+  preferences Json @default("{}")
+
+  // Relations
+  notes TravelNote[]
+
+  @@map("users")
+}
+
+model TravelNote {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  destination String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentLinks ContentLink[]
+  travelPlan   TravelPlan?
+
+  @@map("travel_notes")
+}
+
+model ContentLink {
+  id            String   @id @default(cuid())
+  url           String
+  platform      String   // XIAOHONGSHU, BILIBILI, DOUYIN, MAFENGWO
+  status        String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  extractedData Json?    // Store extracted content as JSON
+  addedAt       DateTime @default(now())
+
+  // Relations
+  noteId String
+  note   TravelNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@map("content_links")
+}
+
+model TravelPlan {
+  id               String   @id @default(cuid())
+  title            String
+  destination      String
+  totalDays        Int
+  estimatedBudget  Json     // Store budget breakdown as JSON
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  noteId String     @unique
+  note   TravelNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  days   TravelDay[]
+  flights FlightOption[]
+  hotels  HotelOption[]
+
+  @@map("travel_plans")
+}
+
+model TravelDay {
+  id           String   @id @default(cuid())
+  dayNumber    Int
+  date         String
+  title        String
+  theme        String
+  weather      Json?    // Store weather info as JSON
+  dailySummary Json     // Store daily summary as JSON
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  planId     String
+  plan       TravelPlan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  activities TravelActivity[]
+
+  @@map("travel_days")
+}
+
+model TravelActivity {
+  id                String   @id @default(cuid())
+  order             Int
+  startTime         String
+  endTime           String
+  type              String   // ATTRACTION, RESTAURANT, HOTEL, TRANSPORT, ACTIVITY
+  title             String
+  description       String
+  location          Json     // Store location info as JSON
+  estimatedCost     Float    @default(0)
+  tips              Json     @default("[]") // Array of tips
+  bookingInfo       Json?    // Store booking info as JSON
+  userModifications Json?    // Store user modifications as JSON
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  dayId String
+  day   TravelDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  @@map("travel_activities")
+}
+
+model FlightOption {
+  id        String   @id @default(cuid())
+  type      String   // OUTBOUND, RETURN
+  airline   Json     // Store airline info as JSON
+  flight    Json     // Store flight details as JSON
+  price     Json     // Store price info as JSON
+  booking   Json     // Store booking info as JSON
+  rating    Json?    // Store rating info as JSON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  planId String
+  plan   TravelPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("flight_options")
+}
+
+model HotelOption {
+  id        String   @id @default(cuid())
+  name      String
+  brand     String?
+  category  String
+  starRating Int     @default(0)
+  location  Json     // Store location info as JSON
+  rooms     Json     // Store room info as JSON
+  amenities Json     // Store amenities as JSON
+  reviews   Json     // Store reviews as JSON
+  policies  Json     // Store policies as JSON
+  booking   Json     // Store booking info as JSON
+  images    Json     @default("[]") // Store images as JSON array
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  planId String
+  plan   TravelPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("hotel_options")
+}
+
+model AIInteraction {
+  id            String   @id @default(cuid())
+  userId        String
+  noteId        String?
+  type          String   // CHAT, SUGGESTION, COMMAND
+  input         String
+  output        String
+  context       Json?    // Store context as JSON
+  metadata      Json?    // Store metadata as JSON
+  createdAt     DateTime @default(now())
+
+  @@map("ai_interactions")
+}
+
+model ExtractionJob {
+  id          String   @id @default(cuid())
+  url         String
+  platform    String
+  status      String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  result      Json?    // Store extraction result as JSON
+  error       String?
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  completedAt DateTime?
+
+  @@map("extraction_jobs")
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
